@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#32145f">
+<title>HoneyGame ✦ Zodiac & Personality</title>
+<style>
+:root{--ink:#28123f;--purple:#55278b;--deep:#32145f;--pink:#ffb8df;--rose:#f46fba;--blue:#b9d9ff;--lav:#e8d7ff;--cream:#fff9ff;--muted:#735f87;--gold:#ffe59b}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;font-family:ui-rounded,"Trebuchet MS",system-ui,-apple-system,sans-serif;color:var(--ink);background:radial-gradient(circle at 15% 0%,#ffe0f2 0,transparent 34%),radial-gradient(circle at 95% 20%,#d7e7ff 0,transparent 30%),linear-gradient(155deg,#fff4fb,#f0e5ff 50%,#e7f3ff);padding:env(safe-area-inset-top) 14px env(safe-area-inset-bottom);overflow-x:hidden}
+button,input{font:inherit}
+button{cursor:pointer;-webkit-tap-highlight-color:transparent}
+.app{max-width:520px;margin:0 auto;padding:18px 0 28px;min-height:100vh;display:flex;flex-direction:column}
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:4px 3px 16px}
+.brand{display:flex;align-items:center;gap:9px;font-weight:900;letter-spacing:.2px}
+.brand-icon{width:39px;height:39px;display:grid;place-items:center;border-radius:14px;background:linear-gradient(145deg,#ffb9df,#b8cfff);box-shadow:0 7px 20px #9e70be2b;font-size:22px}
+.pill{font-size:11px;font-weight:800;letter-spacing:.7px;text-transform:uppercase;padding:8px 10px;border-radius:99px;background:#ffffffa8;border:1px solid #ffffff}
+.screen{display:none;animation:pop .28s ease}.screen.active{display:block}
+@keyframes pop{from{opacity:.3;transform:translateY(7px)}to{opacity:1;transform:translateY(0)}}
+.hero{position:relative;border-radius:30px;padding:27px 23px 24px;overflow:hidden;color:white;background:linear-gradient(145deg,#572787,#32145f 70%);box-shadow:0 18px 38px #48216a30}
+.hero:before,.hero:after{content:"";position:absolute;border-radius:50%;pointer-events:none}
+.hero:before{width:180px;height:180px;right:-60px;top:-65px;background:linear-gradient(140deg,#ffbce4aa,#b8d6ff70)}
+.hero:after{width:105px;height:105px;right:45px;bottom:-66px;border:1px solid #ffffff55}
+.sparkle{position:absolute;color:#ffe6a3;font-size:19px}.s1{right:26px;top:70px}.s2{right:94px;top:20px;font-size:13px}
+.eyebrow{font-size:11px;letter-spacing:2px;font-weight:900;color:#ffd8f0;text-transform:uppercase;position:relative}
+h1{font-size:clamp(31px,9vw,43px);line-height:1.03;letter-spacing:-1.5px;margin:13px 0 12px;position:relative;max-width:320px}
+.hero p{line-height:1.55;color:#f5eaff;font-size:14px;max-width:340px;margin:0 0 19px;position:relative}
+.primary{border:0;color:#32145f;font-weight:900;background:linear-gradient(100deg,#ffc2e4,#c7ddff);padding:15px 18px;border-radius:16px;box-shadow:0 7px 0 #1e0d3b35;width:100%;transition:transform .12s}
+.primary:active,.choice:active{transform:scale(.985)}
+.secondary{border:1px solid #e5d4f4;background:#ffffffb8;color:var(--purple);padding:12px 15px;border-radius:14px;font-weight:800;width:100%}
+.section-title{font-size:17px;font-weight:900;margin:22px 3px 11px}
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.tile{border:1px solid #ffffffc9;background:#ffffffb3;border-radius:19px;padding:15px 13px;box-shadow:0 7px 22px #7d4d9b0c}
+.tile .emoji{font-size:24px;margin-bottom:8px}.tile strong{display:block;font-size:13px;margin-bottom:4px}.tile span{font-size:11px;line-height:1.4;color:var(--muted)}
+.disclaimer{font-size:11px;line-height:1.5;color:#79658b;text-align:center;margin:17px 12px 0}
+.progress-row{display:flex;align-items:center;justify-content:space-between;font-size:12px;font-weight:800;color:#76578f;margin:4px 3px 9px}
+.track{height:7px;border-radius:99px;background:#ffffffb8;overflow:hidden;margin-bottom:21px}.fill{height:100%;width:0;background:linear-gradient(90deg,#ef83c4,#8d74ef);border-radius:99px;transition:width .25s}
+.question-card{border:1px solid #fff;background:#ffffffc7;border-radius:26px;padding:22px 17px;box-shadow:0 12px 32px #61348712}
+.q-kicker{font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:#a24f9b;font-weight:900}
+h2{font-size:25px;line-height:1.15;letter-spacing:-.7px;margin:10px 0 8px}
+.q-help{font-size:13px;line-height:1.45;color:var(--muted);margin:0 0 18px}
+.choices{display:grid;gap:10px}
+.choice{width:100%;text-align:left;border:1.5px solid #e5d8f4;background:#fffaffd9;border-radius:17px;padding:14px 13px;display:flex;align-items:center;gap:11px;color:var(--ink);font-weight:750;font-size:14px;line-height:1.35;transition:.15s}
+.choice .letter{flex:0 0 31px;height:31px;border-radius:11px;background:#f0e5ff;display:grid;place-items:center;color:#70409a;font-weight:900}
+.choice.selected{border-color:#9b68d3;background:#f3e7ff;box-shadow:0 0 0 2px #b58be62c}
+.choice.selected .letter{background:#6934a0;color:white}
+.actions{display:flex;gap:10px;margin-top:15px}.actions .secondary{width:36%}.actions .primary{flex:1}
+.note{background:#fff5c9b5;border:1px solid #ffebb1;border-radius:14px;padding:11px 13px;font-size:12px;line-height:1.45;color:#685128;margin-top:14px}
+.zodiac-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:15px}
+.sign{border:1px solid #fff;background:#ffffffbf;border-radius:17px;padding:12px 7px;text-align:center;color:var(--ink)}
+.sign:active{transform:scale(.97)}.sign .glyph{font-size:26px;display:block;margin-bottom:5px}.sign b{font-size:12px;display:block}.sign small{font-size:10px;color:var(--muted)}
+.sign.chosen{background:#f1e3ff;border:2px solid #9a6dd1;padding:11px 6px}
+.result-top{text-align:center;border-radius:27px;padding:25px 20px;background:linear-gradient(145deg,#582a87,#32145f);color:white;position:relative;overflow:hidden}
+.result-top .orb{width:91px;height:91px;margin:0 auto 14px;display:grid;place-items:center;border-radius:30px;background:linear-gradient(145deg,#ffcae8,#c4dcff);font-size:48px;box-shadow:0 10px 30px #10051d40}
+.result-top h2{font-size:29px;margin:8px 0;color:white}.result-top p{font-size:13px;color:#f1e4ff;line-height:1.55;margin:8px auto 0;max-width:340px}
+.result-card{margin-top:12px;border:1px solid white;background:#ffffffc7;border-radius:22px;padding:17px}
+.result-card h3{margin:0 0 8px;font-size:14px}.result-card p{margin:0;color:#6c587d;font-size:13px;line-height:1.55}
+.tag-row{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px}.tag{font-size:11px;font-weight:800;background:#f0e3ff;padding:8px 10px;border-radius:99px;color:#61328d}
+.score-line{height:8px;background:#eadcf6;border-radius:99px;overflow:hidden;margin-top:9px}.score-line span{display:block;height:100%;background:linear-gradient(90deg,#f18cc7,#8a76ed);border-radius:99px}
+footer{text-align:center;color:#9a84ac;font-size:10px;margin-top:auto;padding:25px 0 4px}
+.backline{display:flex;align-items:center;gap:9px;margin:0 0 16px}.back{border:1px solid #fff;background:#ffffffb8;width:39px;height:39px;border-radius:13px;color:var(--purple);font-size:20px}
+.backline strong{font-size:14px}
+@media(min-width:520px){body{padding-left:20px;padding-right:20px}.app{padding-top:25px}}
+</style>
+
+  <meta name="theme-color" content="#5b247a">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="HoneyGame">
+  <link rel="manifest" href="./manifest.json">
+  <link rel="icon" type="image/png" sizes="192x192" href="./icon-192.png">
+  <link rel="apple-touch-icon" href="./icon-192.png">
+
+</head>
+<body>
+<div class="app">
+  <div class="topbar"><div class="brand"><div class="brand-icon">✦</div><span>HoneyGame</span></div><div class="pill">A little self-discovery</div></div>
+  <section id="home" class="screen active">
+    <div class="hero"><span class="sparkle s1">✦</span><span class="sparkle s2">✧</span><div class="eyebrow">Your cosmic corner</div><h1>Meet the magic<br>in you.</h1><p>Explore your personality, discover your zodiac sign, and find little truths that help you understand yourself better.</p><button class="primary" id="startBtn">Start my personality quiz ✨</button></div>
+    <div class="section-title">Choose your kind of discovery</div>
+    <div class="tiles">
+      <div class="tile"><div class="emoji">💗</div><strong>Personality quiz</strong><span>Find your playful inner archetype.</span></div>
+      <div class="tile"><div class="emoji">♎</div><strong>Zodiac corner</strong><span>Explore all 12 signs and their symbols.</span></div>
+      <div class="tile"><div class="emoji">🌙</div><strong>Self-reflection</strong><span>Notice your strengths and growth edges.</span></div>
+      <div class="tile"><div class="emoji">🦋</div><strong>Just for fun</strong><span>No grades, pressure, or wrong answers.</span></div>
+    </div>
+    <div class="section-title">Find your zodiac sign</div>
+    <p style="font-size:12px;color:#735f87;margin:-4px 3px 0;line-height:1.5">Tap a sign to explore its traditional dates and themes.</p>
+    <div id="zodiacHome" class="zodiac-grid"></div>
+    <p class="disclaimer">Astrology is a cultural tradition and entertainment, not a scientific personality test. Your choices and experiences are what make you uniquely you.</p>
+  </section>
+  <section id="quiz" class="screen">
+    <div class="backline"><button class="back" id="quizBack" aria-label="Back">←</button><strong>Your personality journey</strong></div>
+    <div class="progress-row"><span id="stepLabel">QUESTION 1 OF 7</span><span id="percent">14%</span></div><div class="track"><div class="fill" id="progress"></div></div>
+    <div class="question-card"><div class="q-kicker" id="qKicker">Your energy</div><h2 id="qTitle">When you enter a room...</h2><p class="q-help" id="qHelp">Choose what feels most like you lately. No answer is better than another.</p><div class="choices" id="choices"></div></div>
+    <div class="note">✨ Go with your first honest instinct. This is for reflection, not a fixed label.</div>
+    <div class="actions"><button class="secondary" id="prevBtn">Previous</button><button class="primary" id="nextBtn">Next ✦</button></div>
+  </section>
+  <section id="zodiac" class="screen">
+    <div class="backline"><button class="back" id="zodiacBack" aria-label="Back">←</button><strong>Zodiac corner</strong></div>
+    <div id="zodiacDetail"></div>
+    <button class="primary" id="zodiacQuiz" style="margin-top:14px">Try the personality quiz ✨</button>
+  </section>
+  <section id="result" class="screen">
+    <div class="backline"><button class="back" id="resultHome" aria-label="Back home">←</button><strong>Your result</strong></div>
+    <div id="resultContent"></div>
+    <button class="primary" id="retakeBtn" style="margin-top:14px">Play again ♡</button>
+    <button class="secondary" id="homeBtn" style="margin-top:9px">Back to HoneyGame</button>
+  </section>
+  <footer>Made with love by Anne 💗</footer>
+</div>
+<script>
+const signs=[
+{name:"Aries",glyph:"♈",dates:"Mar 21 – Apr 19",element:"Fire",motto:"The brave starter",traits:"Bold, energetic, direct",detail:"Traditionally linked with initiative, courage, and a love of beginning new things. A useful reflection: where could you act bravely while still making room for patience?"},
+{name:"Taurus",glyph:"♉",dates:"Apr 20 – May 20",element:"Earth",motto:"The steady builder",traits:"Grounded, loyal, comfort-loving",detail:"Traditionally linked with steadiness, loyalty, beauty, and comfort. A useful reflection: how can you protect your peace without becoming too attached to what is familiar?"},
+{name:"Gemini",glyph:"♊",dates:"May 21 – Jun 20",element:"Air",motto:"The curious connector",traits:"Curious, expressive, adaptable",detail:"Traditionally linked with communication, variety, and curiosity. A useful reflection: which ideas deserve your focus long enough to become something real?"},
+{name:"Cancer",glyph:"♋",dates:"Jun 21 – Jul 22",element:"Water",motto:"The caring protector",traits:"Nurturing, intuitive, devoted",detail:"Traditionally linked with home, care, memory, and emotional bonds. A useful reflection: how can you care for others while caring for your own needs, too?"},
+{name:"Leo",glyph:"♌",dates:"Jul 23 – Aug 22",element:"Fire",motto:"The warm-hearted star",traits:"Expressive, generous, confident",detail:"Traditionally linked with creativity, warmth, and self-expression. A useful reflection: how can you shine in a way that also encourages others to shine?"},
+{name:"Virgo",glyph:"♍",dates:"Aug 23 – Sep 22",element:"Earth",motto:"The thoughtful improver",traits:"Observant, practical, organised",detail:"Traditionally linked with service, careful observation, and improvement. A useful reflection: can you value progress without demanding perfection from yourself?"},
+{name:"Libra",glyph:"♎",dates:"Sep 23 – Oct 22",element:"Air",motto:"The harmony maker",traits:"Diplomatic, thoughtful, fair-minded",detail:"Traditionally linked with balance, beauty, and partnership. A useful reflection: how can you keep the peace without abandoning your own honest opinion?"},
+{name:"Scorpio",glyph:"♏",dates:"Oct 23 – Nov 21",element:"Water",motto:"The deep diver",traits:"Focused, private, passionate",detail:"Traditionally linked with depth, persistence, and transformation. A useful reflection: what would help you trust wisely while staying open to change?"},
+{name:"Sagittarius",glyph:"♐",dates:"Nov 22 – Dec 21",element:"Fire",motto:"The open-road explorer",traits:"Adventurous, candid, optimistic",detail:"Traditionally linked with exploration, learning, and freedom. A useful reflection: how can you turn big dreams into plans you can actually follow?"},
+{name:"Capricorn",glyph:"♑",dates:"Dec 22 – Jan 19",element:"Earth",motto:"The patient achiever",traits:"Disciplined, responsible, determined",detail:"Traditionally linked with ambition, responsibility, and long-term effort. A useful reflection: can you make room for rest while still honouring your goals?"},
+{name:"Aquarius",glyph:"♒",dates:"Jan 20 – Feb 18",element:"Air",motto:"The original thinker",traits:"Independent, inventive, idealistic",detail:"Traditionally linked with originality, community, and new ideas. A useful reflection: how can you make your unique perspective useful to the people around you?"},
+{name:"Pisces",glyph:"♓",dates:"Feb 19 – Mar 20",element:"Water",motto:"The imaginative empath",traits:"Imaginative, gentle, compassionate",detail:"Traditionally linked with imagination, empathy, and intuition. A useful reflection: how can you honour your sensitivity while keeping clear boundaries?"}
+];
+const qs=[
+{kicker:"Your energy",title:"When you enter a room full of people…",help:"Think about what you naturally do when you feel comfortable.",opts:[
+["A","I observe first and warm up in my own time.","quiet"],["B","I start conversations and bring lively energy.","spark"],["C","I look for one person I can connect with deeply.","heart"],["D","I notice the mood and help everyone feel included.","care"]]},
+{kicker:"Your dreams",title:"Your ideal free afternoon looks like…",help:"Choose the scene that sounds most nourishing.",opts:[
+["A","A cosy space, a favourite show, and something delicious.","calm"],["B","A spontaneous outing somewhere new.","spark"],["C","A meaningful talk, journaling, or creative time.","heart"],["D","Working on a personal goal and feeling accomplished.","drive"]]},
+{kicker:"Your friendships",title:"A friend comes to you with a problem. You…",help:"There is no perfect response—just your instinct.",opts:[
+["A","Listen carefully and make them feel understood.","care"],["B","Help them make a practical plan.","drive"],["C","Try to lighten the mood and remind them life moves on.","spark"],["D","Ask thoughtful questions so they can understand their feelings.","heart"]]},
+{kicker:"Your strength",title:"Which compliment would mean the most to you?",help:"Pick the one that feels most personal.",opts:[
+["A","“You make people feel safe and seen.”","care"],["B","“You make things happen when you set your mind to it.”","drive"],["C","“You bring a special light wherever you go.”","spark"],["D","“You understand things in a deep, thoughtful way.”","heart"]]},
+{kicker:"When life gets hard",title:"When you feel overwhelmed, you usually…",help:"Think of your usual pattern, not what you wish you did.",opts:[
+["A","Take space to reset and think quietly.","quiet"],["B","Make a list and tackle one thing at a time.","drive"],["C","Reach out to someone I trust.","care"],["D","Look for a new perspective or change of scene.","spark"]]},
+{kicker:"Your future",title:"What are you most excited to build in your life?",help:"Choose the kind of progress that matters to you right now.",opts:[
+["A","A peaceful, beautiful life with strong foundations.","calm"],["B","A meaningful career and the freedom to achieve more.","drive"],["C","Deep love, real friendship, and a sense of belonging.","heart"],["D","A life full of discovery, creativity, and new experiences.","spark"]]},
+{kicker:"Your inner world",title:"Which sentence feels closest to your heart?",help:"Choose the one you would most like to live by.",opts:[
+["A","I want to grow gently without losing my peace.","calm"],["B","I want to be brave enough to go after what I want.","drive"],["C","I want the people I love to feel truly cared for.","care"],["D","I want to keep learning who I am and what matters to me.","heart"]]}
+];
+const archetypes={
+calm:{name:"The Soft-Life Architect",emoji:"🌷",tagline:"You are drawn to peace, beauty, and a life built with intention.",strengths:"You may value steadiness, thoughtful choices, and making your surroundings feel like a refuge.",growth:"Protect your peace, but remember that growth sometimes asks you to do uncomfortable things. Gentle discipline can be powerful.",tags:["Intentional","Grounded","Peace-seeking"]},
+quiet:{name:"The Quiet Observer",emoji:"🌙",tagline:"You take things in deeply before deciding where to place your energy.",strengths:"You may notice details others miss and prefer genuine connections over being the loudest person in the room.",growth:"Your thoughts deserve a place in the conversation. Practise sharing them before you feel completely ready.",tags:["Observant","Reflective","Selective"]},
+spark:{name:"The Bright Spark",emoji:"🦋",tagline:"Curiosity and fresh energy help you find possibility in everyday life.",strengths:"You may enjoy variety, social connection, and bringing momentum to new ideas.",growth:"Your next level may come from following through after the exciting beginning. Pick one idea and give it time.",tags:["Curious","Expressive","Energetic"]},
+heart:{name:"The Deep-Feeling Dreamer",emoji:"💗",tagline:"Meaning matters to you, and you want your life to feel true to your values.",strengths:"You may be thoughtful, imaginative, and drawn to honest conversations and meaningful bonds.",growth:"Give your feelings room, but let evidence and boundaries help guide your choices too.",tags:["Intuitive","Thoughtful","Meaning-led"]},
+care:{name:"The Gentle Safe Place",emoji:"🫶",tagline:"You notice people, and you want the people around you to feel supported.",strengths:"You may listen with care, show up for others, and help create a sense of belonging.",growth:"Care is most sustainable when it includes you. You are allowed to rest, say no, and ask for support.",tags:["Warm","Empathetic","Supportive"]},
+drive:{name:"The Quiet Achiever",emoji:"⭐",tagline:"You feel good when your effort turns into real progress.",strengths:"You may value responsibility, practical action, and building a future you can be proud of.",growth:"Ambition works best with patience. Measure progress by consistency, not by expecting yourself to do everything at once.",tags:["Purposeful","Practical","Determined"]}
+};
+let index=0,answers=Array(qs.length).fill(null),chosenSign=null;
+function show(id){document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));document.getElementById(id).classList.add("active");window.scrollTo({top:0,behavior:"smooth"})}
+function renderSigns(target,compact=false){target.innerHTML="";signs.forEach(s=>{const b=document.createElement("button");b.className="sign"+(chosenSign===s.name?" chosen":"");b.innerHTML=`<span class="glyph">${s.glyph}</span><b>${s.name}</b><small>${s.dates}</small>`;b.addEventListener("click",()=>{chosenSign=s.name;renderSigns(target,compact);renderSignDetail(s)});target.appendChild(b)})}
+function renderSignDetail(s){document.getElementById("zodiacDetail").innerHTML=`<div class="result-top"><div class="orb">${s.glyph}</div><div class="eyebrow">Zodiac sign · ${s.element} element</div><h2>${s.name}</h2><p>${s.dates} · ${s.motto}</p></div><div class="result-card"><h3>Traditional themes</h3><p>${s.traits}</p><div class="tag-row">${s.traits.split(", ").map(t=>`<span class="tag">${t}</span>`).join("")}</div></div><div class="result-card"><h3>A little reflection</h3><p>${s.detail}</p></div>`}
+function startQuiz(){index=0;answers=Array(qs.length).fill(null);renderQuestion();show("quiz")}
+function renderQuestion(){const q=qs[index];document.getElementById("stepLabel").textContent=`QUESTION ${index+1} OF ${qs.length}`;document.getElementById("percent").textContent=`${Math.round((index+1)/qs.length*100)}%`;document.getElementById("progress").style.width=`${(index+1)/qs.length*100}%`;document.getElementById("qKicker").textContent=q.kicker;document.getElementById("qTitle").textContent=q.title;document.getElementById("qHelp").textContent=q.help;const c=document.getElementById("choices");c.innerHTML="";q.opts.forEach((o,j)=>{const b=document.createElement("button");b.className="choice"+(answers[index]===o[2]?" selected":"");b.innerHTML=`<span class="letter">${o[0]}</span><span>${o[1]}</span>`;b.addEventListener("click",()=>{answers[index]=o[2];renderQuestion()});c.appendChild(b)});document.getElementById("prevBtn").style.visibility=index===0?"hidden":"visible";document.getElementById("nextBtn").textContent=index===qs.length-1?"Reveal my result ✨":"Next ✦"}
+function finishQuiz(){const tally={};answers.forEach(a=>{tally[a]=(tally[a]||0)+1});const best=Object.keys(tally).sort((a,b)=>tally[b]-tally[a])[0]||"calm";const r=archetypes[best];const s=chosenSign?signs.find(x=>x.name===chosenSign):null;const total=answers.length;document.getElementById("resultContent").innerHTML=`<div class="result-top"><div class="orb">${r.emoji}</div><div class="eyebrow">Your playful personality archetype</div><h2>${r.name}</h2><p>${r.tagline}</p></div><div class="result-card"><h3>✨ Your possible strengths</h3><p>${r.strengths}</p><div class="tag-row">${r.tags.map(t=>`<span class="tag">${t}</span>`).join("")}</div></div><div class="result-card"><h3>🌱 Your growth note</h3><p>${r.growth}</p></div>${s?`<div class="result-card"><h3>${s.glyph} Your zodiac corner: ${s.name}</h3><p>${s.motto}. In astrology, ${s.name} is traditionally associated with ${s.traits.toLowerCase()}. Use it as a fun reflection, not a rulebook.</p></div>`:`<div class="result-card"><h3>🌟 Add your zodiac sign</h3><p>Choose a sign from the home screen to see its traditional themes alongside your result.</p></div>`}<div class="result-card"><h3>Your journey</h3><p>You answered all ${total} questions. Keep what resonates, leave what doesn't, and remember: no short quiz can capture your whole personality.</p></div>`;show("result")}
+document.getElementById("startBtn").addEventListener("click",startQuiz);document.getElementById("quizBack").addEventListener("click",()=>show("home"));document.getElementById("prevBtn").addEventListener("click",()=>{if(index>0){index--;renderQuestion()}});document.getElementById("nextBtn").addEventListener("click",()=>{if(!answers[index]){document.getElementById("qHelp").textContent="Choose the answer that feels most like you, then continue. 💗";return}if(index<qs.length-1){index++;renderQuestion()}else finishQuiz()});document.getElementById("zodiacBack").addEventListener("click",()=>show("home"));document.getElementById("zodiacQuiz").addEventListener("click",startQuiz);document.getElementById("retakeBtn").addEventListener("click",startQuiz);document.getElementById("homeBtn").addEventListener("click",()=>show("home"));document.getElementById("resultHome").addEventListener("click",()=>show("home"));
+const homeGrid=document.getElementById("zodiacHome");renderSigns(homeGrid);homeGrid.addEventListener("click",e=>{const b=e.target.closest(".sign");if(!b)return;const s=signs.find(x=>x.name===b.querySelector("b").textContent);if(s){renderSignDetail(s);show("zodiac")}});
+</script>
+
+<script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("./sw.js").catch(() => {});
+  });
+}
+</script>
+
+</body>
+</html>

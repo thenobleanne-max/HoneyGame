@@ -1,0 +1,41 @@
+name: Build HoneyGame Android APK
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+
+jobs:
+  build-apk:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out project
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - name: Install Cordova
+        run: npm install -g cordova
+      - name: Prepare Android project
+        run: |
+          cordova create /tmp/honeygame com.anne.honeygame HoneyGame
+          cp index.html /tmp/honeygame/www/index.html
+          cp config.xml /tmp/honeygame/config.xml
+          cd /tmp/honeygame
+          cordova platform add android@13
+      - name: Build APK
+        run: |
+          cd /tmp/honeygame
+          cordova build android --debug
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: HoneyGame-Android-APK
+          path: /tmp/honeygame/platforms/android/app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
